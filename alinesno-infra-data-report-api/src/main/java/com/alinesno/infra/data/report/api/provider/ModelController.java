@@ -25,6 +25,7 @@ import java.util.List;
 @Validated
 public class ModelController {
 
+    @Autowired
     private final IReportModelService reportModelService;
 
     @Autowired
