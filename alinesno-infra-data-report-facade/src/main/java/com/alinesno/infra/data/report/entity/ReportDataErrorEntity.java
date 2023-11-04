@@ -1,5 +1,6 @@
 package com.alinesno.infra.data.report.entity;
 
+
 import com.alinesno.infra.common.facade.mapper.entity.InfraBaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
 
@@ -8,5 +9,4 @@ import com.baomidou.mybatisplus.annotation.TableName;
  */
 @TableName("report_data")
 public class ReportDataErrorEntity extends InfraBaseEntity {
-
 }
