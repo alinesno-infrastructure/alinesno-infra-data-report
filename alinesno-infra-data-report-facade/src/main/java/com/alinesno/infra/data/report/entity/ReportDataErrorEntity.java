@@ -7,6 +7,6 @@ import com.baomidou.mybatisplus.annotation.TableName;
 /**
  * 上报数据表
  */
-@TableName("report_data")
+@TableName("report_data_error")
 public class ReportDataErrorEntity extends InfraBaseEntity {
 }
