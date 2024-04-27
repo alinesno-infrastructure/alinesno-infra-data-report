@@ -6,7 +6,7 @@
 				<el-card shadow="false" class="box-card">
 					<div slot="header" class="clearfix">
 						<span>客户端配置</span>
-						<div style="float: right; margin-left: 10px;"><el-button icon="el-icon-delete" size="mini" type="warning" @click="resetForm">清 空</el-button></div>
+						<div style="float: right; margin-left: 10px;"><el-button icon="Delete" size="mini" type="warning" @click="resetForm">清 空</el-button></div>
 						<div style="float: right; margin-left: 10px;"><el-button icon="el-icon-s-claim" size="mini" type="success" @click="submit">发 布</el-button></div>
 					</div>
 

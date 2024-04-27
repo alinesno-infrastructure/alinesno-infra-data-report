@@ -16,7 +16,7 @@
 					<el-button slot="reference" style="padding: 3px 0; " icon="el-icon-question" type="text" title="说明"></el-button>
 				</el-popover>
 				<div style="float: right; margin-left: 10px;">
-					<el-button icon="el-icon-delete" size="small" type="warning" @click="resetForm">清 空</el-button>
+					<el-button icon="Delete" size="small" type="warning" @click="resetForm">清 空</el-button>
 				</div>
 				<div style="float: right; margin-left: 10px;">
 					<el-button icon="el-icon-s-claim" size="small" type="success" @click="submit">发 布</el-button>
@@ -32,7 +32,7 @@
 					<el-table-column label="服务名称" prop="name"></el-table-column>
 					<el-table-column label="服务地址" prop="uri"></el-table-column>
 					<el-table-column label="操作" width="60">
-						<template slot-scope="scope">
+						<template #default="scope">
 							<el-button v-if="scope.row.selected !== true" size="mini" circle icon="el-icon-plus" type="success" title="点击添加" @click="handleAddRegServer(scope.row)"></el-button>
 							<el-button v-if="scope.row.selected === true" size="mini" circle icon="el-icon-check" type="primary" title="已添加" @click="handleAddRegServer(scope.row)"></el-button>
 						</template>
@@ -95,20 +95,20 @@
 						  <el-table-column prop="name" label="路由名称"></el-table-column>
 						  <el-table-column prop="uri" label="路由地址"></el-table-column>
 						  <el-table-column label="路由权重" width="80">
-							  <template slot-scope="scope">
+							  <template #default="scope">
 								  <el-tag size="small" type="" style="font-weight: bold;">{{scope.row.weight}}</el-tag>
 							  </template>
 						  </el-table-column>
 						  <el-table-column label="配置比例">
-							  <template slot-scope="scope">
+							  <template #default="scope">
 							    <div class="block">
 							      <el-slider v-model="scope.row.weight"></el-slider>
 							    </div>
 							  </template>
 						  </el-table-column>
 						  <el-table-column label="操作" width="60">
-						  	<template slot-scope="scope">
-						  		<el-button size="mini" circle icon="el-icon-delete" title="删除" style="border: 0px; font-size: 12pt;" @click="handleDeleteServer(scope.row)"></el-button>
+						  	<template #default="scope">
+						  		<el-button size="mini" circle icon="Delete" title="删除" style="border: 0px; font-size: 12pt;" @click="handleDeleteServer(scope.row)"></el-button>
 						  	</template>
 						  </el-table-column>
 						</el-table>

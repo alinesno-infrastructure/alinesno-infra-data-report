@@ -26,7 +26,7 @@
 							<el-button slot="reference" style="padding: 3px 0; " icon="el-icon-question" type="text" title="说明"></el-button>
 						</el-popover>
 						<div style="float: right; margin-left: 10px;">
-						    <el-button icon="el-icon-delete" size="mini" type="warning" @click="resetForm"> 清 空 </el-button>
+						    <el-button icon="Delete" size="mini" type="warning" @click="resetForm"> 清 空 </el-button>
 						</div>
 						<div style="float: right; margin-left: 10px;">
 						    <el-button icon="el-icon-s-claim" size="mini" type="success" @click="submit"> 发 布 </el-button>

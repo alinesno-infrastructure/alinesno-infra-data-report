@@ -1,5 +1,5 @@
 server:
-  port: 30201
+  port: 30301
 
 # spring 配置
 spring:
@@ -9,15 +9,16 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/dev_alinesno_infra_data_report_v100?characterEncoding=UTF-8&serverTimezone=GMT%2B8&allowMultiQueries=true
     username: root
-    password:  adminer
+    password:  Qax@168
   data:
     redis:
       host: 127.0.0.1
       port: 6379
-      password: aip@local
   devtools:
     restart:
       enabled: true
+  kafka:
+    bootstrap-servers: 192.168.204.130:9092
       
 actable:
   table:
@@ -30,6 +31,14 @@ actable:
     prefix: alinesno_data_report_idx_
   unique:
     prefix: alinesno_data_report_uni_
+
+minio:
+  endpoint: http://127.0.0.1:9000
+  accesskey: minioadmin
+  secretkey: minioadmin
+  bucketname: alinesnoinfradatareport
+  port: 19000
+  local-storage-path: D:/alinesno-data-report/
 
 # sa-token配置
 sa-token:

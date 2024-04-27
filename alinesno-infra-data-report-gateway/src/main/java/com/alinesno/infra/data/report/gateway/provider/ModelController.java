@@ -1,7 +1,7 @@
 package com.alinesno.infra.data.report.gateway.provider;
 
 import com.alinesno.infra.common.facade.response.AjaxResult;
-import com.alinesno.infra.data.report.gateway.dto.ReportModelDTO;
+import com.alinesno.infra.data.report.dto.ReportModelDTO;
 import com.alinesno.infra.data.report.entity.ReportModelEntity;
 import com.alinesno.infra.data.report.service.IReportModelService;
 

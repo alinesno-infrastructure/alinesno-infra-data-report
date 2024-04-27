@@ -3,6 +3,7 @@ package com.alinesno.infra.data.report.entity;
 import java.util.Date;
 import com.alinesno.infra.common.facade.mapper.entity.InfraBaseEntity;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.gitee.sunchenbin.mybatis.actable.annotation.ColumnComment;
 import com.gitee.sunchenbin.mybatis.actable.annotation.ColumnType;
@@ -11,9 +12,8 @@ import lombok.Data;
 
 
 /**
- * <p>
- *
- * </p>
+ * 功能名： 【上报文件】
+ * 数据表：  business_model
  *
  * @author LuoXiaoDong
  * @version 1.0.0
@@ -181,21 +181,31 @@ public class FileReportEntity extends InfraBaseEntity {
 	@TableField("remark")
 	private String remark;
 
-	/**
-	 * 创建时间
-	 */
-	@ColumnType(value = MySqlTypeConstant.DATETIME, length = 18)
-	@ColumnComment("创建时间")
-	@TableField("create_time")
-	private Date createTime;
 
 	/**
-	 * 删除标识：0-未删除，1-已删除
+	 * 上报异常消息
+	 */
+	@ColumnType(value = MySqlTypeConstant.LONGTEXT)
+	@ColumnComment("上报异常消息")
+	@TableField("error_msg")
+	private String errorMsg;
+
+	/**
+	 * 是否删除
 	 */
 	@ColumnType(length = 1)
-	@ColumnComment("删除标识：0-未删除，1-已删除")
-	@TableField("is_deleted")
-	private int isDeleted;
+	@ColumnComment("是否删除")
+	@TableLogic(value = "0",delval = "1")
+	@TableField("has_delete")
+	private int hasDelete;
 
+	@Override
+	public int getHasDelete() {
+		return hasDelete;
+	}
 
+	@Override
+	public void setHasDelete(int hasDelete) {
+		this.hasDelete = hasDelete;
+	}
 }

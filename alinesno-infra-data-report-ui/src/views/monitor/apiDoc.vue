@@ -8,7 +8,7 @@
 						<span slot-scope="{ node, data }">							
 							<span style="font-size: 10pt;">{{ node.label }}</span>							
 							<span>
-							  <el-button size="mini" circle icon="el-icon-edit" title="编辑" 
+							  <el-button size="mini" circle icon="Edit" title="编辑"
 							  style="border: 0px; margin-left: 0px; font-size: 10pt; padding: 2px;" 
 							  @click="() => handleNodeEdit(data)" :disabled="handleType=='edit' && id != data.id" ></el-button>
 							  <el-button v-show="isNotGroups(node.data.code)" size="mini" circle icon="el-icon-view" 

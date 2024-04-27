@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.alinesno.infra.data.report.mapper.FileShareMapper">
+
+    <resultMap type="com.alinesno.infra.data.report.entity.FileShareEntity" id="FileShareResult">
+                    <result property="endTime" column="end_time"/>
+                    <result property="extractionCode" column="extraction_code"/>
+                    <result property="shareBatchNum" column="share_batch_num"/>
+                    <result property="shareStatus" column="share_status"/>
+                    <result property="shareType" column="share_type"/>
+                    <result property="shareUserId" column="share_user_id"/>
+                    <result property="shareFileType" column="share_file_type"/>
+                    <result property="shareFileId" column="share_file_id"/>
+                    <result property="shareFileName" column="share_file_name"/>
+                    <result property="shareFileExtendName" column="share_file_extend_name"/>
+                    <result property="shareFileFullName" column="share_file_full_name"/>
+                    <result property="shareFileSize" column="share_file_size"/>
+                    <result property="storageFileId" column="storage_file_id"/>
+                    <result property="storageFilePath" column="storage_file_path"/>
+            </resultMap>
+</mapper>

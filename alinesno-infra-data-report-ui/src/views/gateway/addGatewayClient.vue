@@ -4,19 +4,19 @@
 		<el-dialog title="添加客户端" :visible.sync="dialogFormVisible" width="40%" :close-on-click-modal="false">
 			<el-table size="mini" :data="clientTableData" style="width: 100%">
 				<el-table-column label="客户端ID" width="280">
-					<template slot-scope="scope">
+					<template #default="scope">
 						<el-tag size="small" type="warning" style="font-weight: bold;">{{scope.row.id}}</el-tag>
 					</template>
 				</el-table-column>	
 				<el-table-column label="分组" width="120">
-					<template slot-scope="scope">
+					<template #default="scope">
 						<el-tag v-for="group in groupOptions" :key="group.value" v-show="(group.value === scope.row.groupCode)" size="small" type="">{{group.label}}</el-tag>
 					</template>
 				</el-table-column>
 				<el-table-column label="名称" prop="name"></el-table-column>
 				<el-table-column label="IP地址" prop="ip"></el-table-column>
 				<el-table-column label="操作" width="60">
-					<template slot-scope="scope">
+					<template #default="scope">
 						<el-button size="mini" circle icon="el-icon-plus" type="success" title="添加" @click="handleAddRegClient(scope.row)"></el-button>
 					</template>
 				</el-table-column>
@@ -72,19 +72,19 @@
 					
 					<el-table size="small" :data="tableData" style="width: 100%">
 						<el-table-column label="客户端ID(系统生成)" width="290">
-							<template slot-scope="scope">
+							<template #default="scope">
 								<el-tag size="small" type="warning" style="font-weight: bold;">{{scope.row.id}}</el-tag>
 							</template>
 						</el-table-column>
 						<el-table-column label="分组">
-							<template slot-scope="scope">
+							<template #default="scope">
 								<el-tag v-for="group in groupOptions" :key="group.value" v-show="(group.value === scope.row.groupCode)" size="small" type="">{{group.label}}</el-tag>
 							</template>
 						</el-table-column>
 						<el-table-column label="名称" prop="name"></el-table-column>
 						<el-table-column label="IP地址" prop="ip"></el-table-column>
 						<el-table-column label="TOKEN" >
-							<template slot-scope="scope">
+							<template #default="scope">
 								<el-tag  v-if="scope.row.token != undefined && scope.row.token != ''" size="small" type="success" style="font-weight: bold;">JWT通行令牌 </el-tag>
 								<el-tag  v-if="scope.row.token == undefined || scope.row.token == ''" size="small" type="" style="font-weight: bold;">无通行令牌 </el-tag>
 								<el-tag  v-if="scope.row.isTimeout == '1'" size="small" type="danger" style="font-weight: bold;">已过期 </el-tag>&nbsp;
@@ -94,7 +94,7 @@
 						<el-table-column label="TOKEN过期时间" prop="tokenEffectiveTime"></el-table-column>						
 
 						<el-table-column label="生成" align="center" width="130">
-							<template slot-scope="scope">
+							<template #default="scope">
 
 								<el-popover
 										placement="right"
@@ -113,7 +113,7 @@
 												<el-input size="small" type="textarea" :rows="8" placeholder="JWT通行令牌内容" v-model="token" :disabled="tokenIsTrue"></el-input><br/><br/>											
 
 												<div style="float: right; margin-left: 10px;">
-													<el-button icon="el-icon-delete" size="small" type="danger" @click="handleRemoveToken(scope.row)">清空令牌</el-button>
+													<el-button icon="Delete" size="small" type="danger" @click="handleRemoveToken(scope.row)">清空令牌</el-button>
 													<el-button icon="el-icon-refresh" size="small" type="primary" @click="handleCreateToken(scope.row)">生成令牌</el-button>
 													<el-button icon="el-icon-document-copy" size="small" type="success" @click="handleCopyToken()">复制令牌</el-button>
 													<!-- <el-button icon="el-icon-circle-close" size="small" type="" @click="handleCloseToken(scope.$index)">关闭</el-button> -->
@@ -129,14 +129,14 @@
 						</el-table-column>
 
 						<el-table-column label="状态" prop="status" align="center" :formatter="formatterStatus">
-							<template slot-scope="scope">
+							<template #default="scope">
 								<div v-if="scope.row.regServerStatus==='0'"><i class="el-icon-success" style="color: #409EFF;"></i>&nbsp;<el-tag size="mini">{{'允许通行'}}</el-tag></div>
 								<div v-if="scope.row.regServerStatus==='1'"><i class="el-icon-error" style="color: #f00000;"></i>&nbsp;<el-tag size="mini" type="danger">{{'禁止通行'}}</el-tag></div>
 							</template>
 						</el-table-column>
 						<el-table-column label="注册时间" prop="regServerTime"></el-table-column>
 						<el-table-column label="操作" width="100">
-							<template slot-scope="scope">
+							<template #default="scope">
 								 <el-dropdown trigger="click" @command="handleCommandRegClient">
 									<el-button size="mini" circle icon="el-icon-setting" title="设置" style="border: 0px;"></el-button>
 								  <el-dropdown-menu slot="dropdown">

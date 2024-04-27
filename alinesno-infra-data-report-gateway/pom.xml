@@ -28,6 +28,19 @@
 			<version>${revision}</version>
 		</dependency>
 
+<!--		<dependency>-->
+<!--			<groupId>com.alinesno.infra.common</groupId>-->
+<!--			<artifactId>alinesno-infra-common-core</artifactId>-->
+<!--			<version>${revision}</version>-->
+<!--		</dependency>-->
+
+<!--		<dependency>-->
+<!--			<groupId>commons-codec</groupId>-->
+<!--			<artifactId>commons-codec</artifactId>-->
+<!--			<version>1.6</version>-->
+<!--		</dependency>-->
+
+
 	</dependencies>
 
 </project>

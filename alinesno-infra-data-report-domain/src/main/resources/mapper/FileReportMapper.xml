@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.alinesno.infra.data.report.mapper.FileReportMapper">
+
+    <resultMap type="com.alinesno.infra.data.report.entity.FileReportEntity" id="FileReportResult">
+                    <result property="fileName" column="file_name"/>
+                    <result property="fileExtendName" column="file_extend_name"/>
+                    <result property="fileFullName" column="file_full_name"/>
+                    <result property="fileSize" column="file_size"/>
+                    <result property="ifDir" column="if_dir"/>
+                    <result property="storageType" column="storage_type"/>
+                    <result property="storageFileId" column="storage_file_id"/>
+                    <result property="storageFilePath" column="storage_file_path"/>
+                    <result property="modelId" column="model_id"/>
+                    <result property="ifCheck" column="if_check"/>
+                    <result property="checkFileId" column="check_file_id"/>
+                    <result property="checkFileName" column="check_file_name"/>
+                    <result property="checkFileExtendName" column="check_file_extend_name"/>
+                    <result property="checkFilePath" column="check_file_path"/>
+                    <result property="reportStatus" column="report_status"/>
+                    <result property="reportRow" column="report_row"/>
+                    <result property="reportTime" column="report_time"/>
+                    <result property="remark" column="remark"/>
+            </resultMap>
+
+    <select id="recycleFileList" resultType="com.alinesno.infra.data.report.entity.FileReportEntity">
+        select
+         *
+        from file_report
+        where has_delete=1
+        <if test=" null != operatorId">
+            AND operator_id =#{operatorId}
+        </if>
+        <if test=" null != fileName">
+            AND file_full_name like '%${fileName}%'
+        </if>
+    </select>
+
+    <update  id="reductionFileReport" parameterType="java.lang.String" >
+        update file_report set has_delete=0
+        where 1=1
+        <if test=" null != id">
+            AND id =#{id}
+        </if>
+    </update >
+
+    <delete  id="deleteFileReport" parameterType="java.lang.String" >
+        delete from file_report
+        where 1=1
+        <if test=" null != id">
+            AND id =#{id}
+        </if>
+    </delete >
+
+    <select id="FileReportTodayStats" resultType="com.alinesno.infra.data.report.vo.FileReportTodayStats">
+        SELECT
+           count(*)                                         as reportTotal
+          ,sum(case when report_status=1 then 1 else 0 end) as reportSuccess
+          ,sum(case when report_status=2 then 1 else 0 end) as reportFail
+		  ,sum(case when report_status=3 then 1 else 0 end) as reportSending
+          ,sum(case when report_status=0 then 1 when report_status=2 then 1 else 0 end) as reportDeal
+		  ,sum(case when report_status=2 and if_check = 0 then 1  else 0  end)          as reportCheckFail
+        FROM file_report
+        where DATE_FORMAT(report_time, '%Y-%m-%d') =CURDATE()
+          and operator_id = #{operatorId}
+    </select>
+
+    <select id="FileReportAbnlStats" resultType="com.alinesno.infra.data.report.vo.FileReportAbnlStats">
+        SELECT
+              count(*)                                         as reportTotal
+             ,sum(case when report_status=1 then 1 else 0 end) as reportSuccess
+             ,sum(case when report_status=2 then 1 else 0 end) as reportFail
+        FROM file_report
+        where   operator_id = #{operatorId}
+            and DATE(add_time) = CURDATE()
+    </select>
+
+    <select id="FileReportMsgStats" resultType="com.alinesno.infra.data.report.vo.FileReportMsgStats">
+	  select
+		sum(successRow) as successRow
+	   ,sum(failRow)    as failRow
+	  from (
+			 select
+                 sum(case when report_status=1 then report_row else 0 end) successRow
+				,0 as failRow
+             from file_report
+             where DATE_FORMAT(report_time, '%Y-%m-%d') =CURDATE()
+                and (report_status =1 )
+				 and operator_id = #{operatorId}
+			 union
+			  select
+				    0 as successRow
+				   ,count(*) as failRow
+			  from message_fail
+				where status = "6"
+				  and DATE(add_time) = CURDATE()
+                  and operator_id = #{operatorId}
+	   ) a
+    </select>
+
+
+    <insert id="insertTable" parameterType="java.lang.String">
+        insert into  #{tableName}
+        values  #{values}
+    </insert>
+
+    <select id="executeSql" parameterType="String">
+        ${sqlContent}
+    </select>
+
+    <select id="selectReportIds" resultType="com.alinesno.infra.data.report.entity.FileReportEntity">
+        select
+          *
+        from file_report
+        ${ew.customSqlSegment}
+    </select>
+
+
+</mapper>

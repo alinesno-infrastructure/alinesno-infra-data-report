@@ -7,7 +7,7 @@
 				<el-table-column label="服务名称" prop="name"></el-table-column>
 				<el-table-column label="服务地址" prop="uri"></el-table-column>
 				<el-table-column label="操作" width="60">
-					<template slot-scope="scope">
+					<template #default="scope">
 						<el-button size="mini" circle icon="el-icon-plus" type="success" title="添加" @click="handleAddRegServer(scope.row)"></el-button>
 					</template>
 				</el-table-column>
@@ -67,13 +67,13 @@
 						<el-table-column label="断言路径" prop="path"></el-table-column>
 						<el-table-column label="注册时间" prop="regServerTime" width="200"></el-table-column>
 						<el-table-column label="状态" prop="regServerStatus">
-							<template slot-scope="scope">
+							<template #default="scope">
 								<div v-if="scope.row.regServerStatus==='0'"><i class="el-icon-success" style="color: #409EFF;"></i>&nbsp;<el-tag size="mini">{{'允许通行'}}</el-tag></div>
 								<div v-if="scope.row.regServerStatus==='1'"><i class="el-icon-error" style="color: #f00000;"></i>&nbsp;<el-tag size="mini" type="danger">{{'禁止通行'}}</el-tag></div>
 							</template>
 						</el-table-column>
 						<el-table-column label="操作" width="80">
-							<template slot-scope="scope">
+							<template #default="scope">
 								 <el-dropdown trigger="click" @command="handleCommandRegServer">
 									<el-button size="mini" circle icon="el-icon-setting" title="设置" style="border: 0px;"></el-button>
 								  <el-dropdown-menu slot="dropdown">

@@ -1,6 +1,5 @@
 package com.alinesno.infra.data.report.entity;
 
-import java.util.Date;
 import com.alinesno.infra.common.facade.mapper.entity.InfraBaseEntity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -11,9 +10,8 @@ import lombok.Data;
 
 
 /**
- * <p>
- *
- * </p>
+ * 功能名： 【数据模型】
+ * 数据表：  business_model
  *
  * @author LuoXiaoDong
  * @version 1.0.0
@@ -155,23 +153,6 @@ public class BusinessModelEntity extends InfraBaseEntity {
 	@ColumnType(MySqlTypeConstant.BIGINT)
 	@ColumnComment("消息类型")
 	@TableField("message_type")
-	private Long messageType;
-
-	/**
-	 * 创建时间
-	 */
-	@ColumnType(value = MySqlTypeConstant.DATETIME, length = 18)
-	@ColumnComment("创建时间")
-	@TableField("create_time")
-	private Date createTime;
-
-	/**
-	 * 删除标识：0-未删除，1-已删除
-	 */
-	@ColumnType(length = 1)
-	@ColumnComment("删除标识：0-未删除，1-已删除")
-	@TableField("is_deleted")
-	private int isDeleted;
-
+	private Integer messageType = 0 ;
 
 }

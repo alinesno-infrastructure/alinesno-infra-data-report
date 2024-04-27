@@ -42,12 +42,12 @@
 			</el-row>
 			<el-table size="small" :data="tableData" style="width: 100%">
 				<el-table-column label="IP地址" prop="ip">
-					<template slot-scope="scope">
+					<template #default="scope">
 						<el-tag size="small" type="success" style="font-weight: bold;">{{scope.row.ip}}</el-tag>
 					</template>
 				</el-table-column>
 				<el-table-column label="状态" prop="status">
-					<template slot-scope="scope">
+					<template #default="scope">
 						<el-tag effect="dark" size="small" v-if="scope.row.status === '0'" type="">允许通行</el-tag>
 						<el-tag effect="dark" size="small" v-if="scope.row.status === '1'" type="danger">禁止通行</el-tag>
 					</template>
@@ -55,7 +55,7 @@
 				<el-table-column label="创建时间" prop="createTime"></el-table-column>
 				<el-table-column label="备注" prop="remarks"></el-table-column>
 				<el-table-column label="操作" width="160">
-					<template slot-scope="scope">
+					<template #default="scope">
 						<el-dropdown trigger="click" @command="handleCommandClient">
 						   <el-button size="mini" type="warning">
 						      管理<i class="el-icon-arrow-down el-icon--right"></i>
