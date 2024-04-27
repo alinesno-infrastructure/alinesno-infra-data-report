@@ -50,15 +50,6 @@ export function listModelName(query , data) {
   })
 }
 
-// 查询【请填写功能名称】列表
-export function listBusinessModel(query , data) {
-  return request({
-    url: managerUrl.datatables ,
-    method: 'post',
-    params: query ,
-    data: data
-  })
-}
 
 // 查询【请填写功能名称】详细
 export function getBusinessModel(id) {
