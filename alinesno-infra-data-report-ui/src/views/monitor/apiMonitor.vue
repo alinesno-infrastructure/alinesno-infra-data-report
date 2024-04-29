@@ -1,6 +1,6 @@
 <template>
 	<div class="app-container">
-		<el-dialog title="监控告警信息" :visible.sync="dialogFormVisible" width="25%" :close-on-click-modal="false">
+		<el-dialog title="监控告警信息" v-model="dialogFormVisible" width="25%" :close-on-click-modal="false">
 			<el-form :model="infoForm" ref="infoForm" :label-width="formLabelWidth">
 				<el-form-item label="服务ID：" size="mini">
 					<el-tag size="small">{{infoForm.routeId}}</el-tag>

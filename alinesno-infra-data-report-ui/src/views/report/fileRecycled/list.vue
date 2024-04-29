@@ -332,6 +332,7 @@ function  getList() {
     searchParams.value = searchParam(queryParamsConfig.value, queryParams.value);
     loading.value = true;
     listDelFileReport(searchParams.value).then(response => {
+      debugger
       FileReportList.value = response.rows;
       total.value = response.total;
       loading.value = false;

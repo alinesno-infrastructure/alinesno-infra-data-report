@@ -11,7 +11,8 @@ import request from '@/utils/request';
 var prefix = '/api/infra/data/report/BusinessModel/' ;
 var managerUrl = {
     datatables : prefix +"datatables" ,
-    ModelNameList : prefix +"getModelNameList" ,
+    modelNameList : prefix +"getModelNameList" ,
+    modelTreeList : prefix +"getModelTreeList" ,
     createUrl: prefix + 'add' ,
     saveUrl: prefix + 'save' ,
     updateUrl: prefix +"modify" ,
@@ -27,7 +28,8 @@ var managerUrl = {
     treeNavInfo: prefix + "listTreeNavInfo",
     checkBusinessModelIfExist: prefix + "checkBusinessModelIfExist",
     checkBusinessModelIfUsed: prefix + "checkBusinessModelIfUsed",
-    checkMinioStatus: prefix + "checkMinioStatus"
+    checkMinioStatus: prefix + "checkMinioStatus",
+    uploadModel: prefix + "uploadfile"
 }
 
 // 查询【请填写功能名称】列表
@@ -43,12 +45,23 @@ export function listBusinessModel(query , data) {
 // 查询【请填写功能名称】列表
 export function listModelName(query , data) {
   return request({
-    url: managerUrl.ModelNameList ,
+    url: managerUrl.modelNameList ,
     method: 'post',
     params: query ,
     data: data
   })
 }
+
+// 查询【请填写功能名称】列表
+export function listModelTree(query , data) {
+  return request({
+    url: managerUrl.modelTreeList ,
+    method: 'post',
+    params: query ,
+    data: data
+  })
+}
+
 
 
 // 查询【请填写功能名称】详细
@@ -185,3 +198,17 @@ export function checkMinioStatus() {
     method: 'get'
   })
 }
+
+export function uploadModel(query,data) {
+  debugger
+  return request({
+    headers: {
+      "Content-Type": "multipart/form-data"
+    },
+    url: managerUrl.uploadModel ,
+    method: 'post',
+    params: query ,
+    data: data
+  })
+}
+

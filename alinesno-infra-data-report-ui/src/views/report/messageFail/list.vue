@@ -180,7 +180,7 @@
   </div>
 </template>
 
-<script  setup name="MqMessage">
+<script  setup name="MessageFail">
 import { ref, reactive, onMounted} from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 const { proxy } = getCurrentInstance();
@@ -363,28 +363,29 @@ function  getFileReportList(){
 
 /** 查询队列消息列表 */
 function  getList() {
-  // 判断是否搜索按钮触发
-  var startDateTmp = null;
-  var endDateTmp = null;
-
-  if ( startDate.value ) {
-    startDateTmp = startDate.value;
-    endDateTmp = endDate.value;
-  } else {
-    startDateTmp = selectedTime[0].value;
-    endDateTmp = selectedTime[1].value;
-  }
-
-
-
-  //时间过滤
-  queryParams.value.addTime[0] = parseTime(startDateTmp);
-  queryParams.value.addTime[1] = parseTime(endDateTmp);
-
-  searchParams.value = searchParam(queryParamsConfig.value, queryParams.value);
+  // // 判断是否搜索按钮触发
+  // var startDateTmp = null;
+  // var endDateTmp = null;
+  //
+  // if ( startDate.value ) {
+  //   startDateTmp = startDate.value;
+  //   endDateTmp = endDate.value;
+  // } else {
+  //   startDateTmp = selectedTime[0].value;
+  //   endDateTmp = selectedTime[1].value;
+  // }
+  //
+  //
+  //
+  // //时间过滤
+  // queryParams.value.addTime[0] = parseTime(startDateTmp);
+  // queryParams.value.addTime[1] = parseTime(endDateTmp);
+  //
+  // searchParams.value = searchParam(queryParamsConfig.value, queryParams.value);
   loading.value = true;
   debugger
-  listMqMessage(searchParams.value).then(response => {
+  // listMqMessage(searchParams.value).then(response => {
+    listMqMessage(queryParams.value).then(response => {
     MqMessageList.value = response.rows;
     total.value = response.total;
     loading.value = false;

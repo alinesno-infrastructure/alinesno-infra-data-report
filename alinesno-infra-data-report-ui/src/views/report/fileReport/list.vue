@@ -180,7 +180,7 @@
               <el-input v-model="form.storageFileId" disabled placeholder="已按照导入模板格式填报数据" style="width:580px"/>
             </el-col>
             <el-col :span="2">
-              <el-button size="small" type="primary" disable="true" @click="handleUpFile(form.modelId)">点击上传</el-button>
+              <el-button size="small" type="primary" disable="true" style="margin-left: 15px" @click="handleUpFile(form.modelId)">点击上传</el-button>
             </el-col>
           </el-row>
         </el-form-item>
@@ -254,7 +254,8 @@
           <el-date-picker clearable size="small"
                           v-model="shareForm.endTime"
                           type="date"
-                          value-format="yyyy-MM-dd"
+                          format="YYYY-MM-DD"
+                          value-format="YYYY-MM-DD"
                           placeholder="选择失效时间"
                           style="width:580px"
           >
@@ -646,7 +647,7 @@ onMounted(() => {
     getList()
   }, 10000)
 
-  getList();
+  // getList();
 
 })
 
@@ -722,6 +723,8 @@ function  handleUpFile(modelId) {
  * 文件上传成功时的钩子
  */
 function  fileUpSuccess(res, file, fileList) {
+  debugger
+  console.log("文件成功!")
   fileuploading.value = false;
   if( res.code == 200 ) {
     proxy.$modal.notifySuccess({
@@ -949,16 +952,19 @@ function  handleExport() {
 }
 
 function  modelChanged(){
-  for (let i in modelNamelist.value) {
-    if (form.value.modelId == modelNamelist[i].id) {
-      reportParmeter.value.modelID       = modelNamelist[i].id
-      reportParmeter.value.kafkaTopice   = modelNamelist[i].kafkaTopice
-      reportParmeter.value.columnNum     = modelNamelist[i].columnNum
-      reportParmeter.value.columnCnName  = modelNamelist[i].columnCnName
-      reportParmeter.value.columnName    = modelNamelist[i].columnName
-      reportParmeter.value.filePath    = modelNamelist[i].storageFilePath
-      reportParmeter.value.fileName    = modelNamelist[i].storageFileName
-      reportParmeter.value.storageFileFullName    = modelNamelist[i].storageFileFullName
+  console.log("新增窗选择模型" + form.value.modelId)
+  for ( let i in modelNamelist.value ) {
+    if ( form.value.modelId == modelNamelist.value[i].id ) {
+      debugger
+      console.log("新增窗选择模型：" +  modelNamelist.value[i].columnNum)
+      reportParmeter.value.modelID       = modelNamelist.value[i].id
+      reportParmeter.value.kafkaTopice   = modelNamelist.value[i].kafkaTopice
+      reportParmeter.value.columnNum     = modelNamelist.value[i].columnNum
+      reportParmeter.value.columnCnName  = modelNamelist.value[i].columnCnName
+      reportParmeter.value.columnName    = modelNamelist.value[i].columnName
+      reportParmeter.value.filePath    = modelNamelist.value[i].storageFilePath
+      reportParmeter.value.fileName    = modelNamelist.value[i].storageFileName
+      reportParmeter.value.storageFileFullName    = modelNamelist.value[i].storageFileFullName
     }
   }
 }
@@ -1007,7 +1013,9 @@ function  cancelShare(){
 }
 
 function  submitShareForm(){
+  debugger
   addFileShareCustom(shareForm.value).then(response => {
+    debugger
     if( response.code == 200 ){
       shareIsSuccess.value = true ; //  分享是否成功
       shareData.value.ifCode = response.data.ifCode;

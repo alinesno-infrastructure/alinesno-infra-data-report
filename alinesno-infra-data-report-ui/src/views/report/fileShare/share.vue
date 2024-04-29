@@ -59,7 +59,7 @@
       </el-table-column>
       <el-table-column label="添加时间" align="center" prop="addTime">
         <template #default="scope">
-          <span>{{ parseDatetime(scope.row.addTime) }}</span>
+          <span>{{ parseTime(scope.row.addTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="200" align="center" class-name="small-padding fixed-width">
@@ -87,8 +87,12 @@ const { proxy } = getCurrentInstance();
 import {listFileShareNew,getShareInfo } from "@/api/report/FileShare";
 import  Condition  from "@/api/search/condition";
 import  searchParam  from "@/api/search/searchform";
+import {parseTime} from "@/utils/ruoyi";
 
 const download_file_url = ref(import.meta.env.VITE_APP_BASE_API + '/api/infra/data/report/BusinessModel/downloadFile?&filePath=');
+
+const shareBatchNumF = ref('');
+const total = ref(0);
 
 const shareStep = ref(0);
 
@@ -166,13 +170,34 @@ const { dialogShareFile, queryParams, queryParamsConfig} = toRefs(data);
 
 // 页面加载后触发
 onMounted(() => {
-  const params = proxy.$route.params;
 
+  //在组件挂载后执行的逻辑
+  //获取当前路由
+  let route = useRoute();
+
+  const params = route.params;
+
+  // debugger
+  // console.log()
+  // const params = proxy.$route.params;
+
+  console.log("分享批次号0 params.shareBatchNum为：" + params.shareBatchNum);
+  shareBatchNumF.value = params.shareBatchNum ;
   getShareInfoF(params.shareBatchNum);
 })
 
 let shareBatchNum = computed( () =>{
-  const params = proxy.$route.params;
+
+  let route = useRoute();
+
+  const params = route.params;
+
+  // debugger
+  // console.log()
+  // const params = proxy.$route.params;
+
+  console.log("分享批次号0 params.shareBatchNum为：" + params.shareBatchNum);
+  // const params = proxy.$route.params;
   return params.shareBatchNum
 });
 
@@ -180,8 +205,9 @@ let shareBatchNum = computed( () =>{
 
 function  getShareInfoF(shareBatchNum){
     FileShareList.value = null ;
-    if( shareBatchNum.value != null || shareBatchNum.value != "" ){
-      getShareInfo(shareBatchNum.value).then(response => {
+    if( shareBatchNum != null || shareBatchNum != "" ){
+      getShareInfo(shareBatchNum).then(response => {
+        debugger
         if( response.code == 200 )
         {
           if(response.data.ifCode == 1)
@@ -189,6 +215,7 @@ function  getShareInfoF(shareBatchNum){
             dialogShareFile.value.visible = true;
             shareStep.value = 2 ;
             dialogShareFile.value.codeForm.oldExtractionCode = response.data.extractionCode;
+            getList();
           }else if(response.data.ifCode == 0){
             getList();
           }
@@ -216,8 +243,8 @@ function  getDownloadFilePathlocal(row){
 }
 
 function  getList() {
-    const params = proxy.$route.params;
-    queryParams.value.shareBatchNum = params.shareBatchNum;
+
+    queryParams.value.shareBatchNum = shareBatchNumF.value;
     searchParams.value = searchParam(queryParamsConfig.value, queryParams.value);
     loading.value = true;
     listFileShareNew(searchParams.value).then(response => {

@@ -115,7 +115,11 @@
             <el-table-column label="简称" align="left" prop="modelShortName" show-overflow-tooltip/>
             <el-table-column label="父模型" align="left" prop="modelParentNameLabel" show-overflow-tooltip/>
             <el-table-column label="导入模板" align="left" prop="storageFileFullName"  width="350"/>
-            <el-table-column label="目标库" align="left" prop="messageTypeLabel" width="90"/>
+            <el-table-column label="目标库" align="left" prop="messageType" width="90">
+              <template #default="scope">
+                <span>{{ messageTypeLabel(scope.row.messageType) }}</span>
+              </template>
+            </el-table-column>
 <!--            <el-table-column label="状态" prop="hasStatus" width="70">-->
 <!--              <template #default="scope">-->
 <!--              <el-switch-->
@@ -126,7 +130,7 @@
 <!--                ></el-switch>-->
 <!--               </template>-->
 <!--            </el-table-column>-->
-            <el-table-column label="操作" width="250" align="center" class-name="small-padding fixed-width">
+            <el-table-column label="操作" width="340" align="left" class-name="small-padding fixed-width">
               <template #default="scope">
                 <el-button
                   size="mini"
@@ -143,7 +147,7 @@
                 <el-button
                   size="mini"
                   type="text"
-
+                  icon="ChatDotRound"
                   @click="handleDesc(scope.row)"
                 >详情</el-button>
       <!--          <el-button-->
@@ -156,7 +160,7 @@
                 <el-button
                   size="mini"
                   type="text"
-                  icon="el-icon-upload2"
+                  icon="Upload"
                   @click="handleUpload(scope.row)"
                 >上传</el-button>
                 <a
@@ -166,7 +170,7 @@
                   :href="getDownloadFilePathlocal(scope.row)"
                   :download="scope.storageFileFullName"
                   class="downloadDataMode"
-                ><i class="el-icon-download"></i>下载
+                ><i class="Download"></i>下载
                 </a>
 
               </template>
@@ -203,7 +207,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="主题" prop="kafkaTopice">
-          <el-input v-model="form.kafkaTopice" placeholder="请输入保存数据的消息主题,只能录入字母、数字、下划线" maxlength="64" show-word-limit />
+          <el-input v-model="form.kafkaTopice" placeholder="请输入保存数据的消息主题,只能录入字母、数字、下划线" maxlength="64" show-word-limit onkeyup="this.value=this.value.replace(/[^\w]/g,'')" onpaste="this.value=this.value.replace(/[^\w]/g,'')"/>
         </el-form-item>
         <el-form-item label="目标库" prop="messageType"  >
           <el-radio-group v-model="form.messageType" class="myradiogroup"  @change="$forceUpdate()">
@@ -321,41 +325,48 @@
       </div>
     </el-dialog>
 
-
-    <!-- 业务模型导入对话框 -->
-    <el-dialog :title="upload.title" v-model="upload.open" width="400px" append-to-body>
-      <el-upload
-        ref="uploadRef"
-        :limit="1"
-        accept=".xlsx"
-        :headers="upload.headers"
-        :action="upload.url + '?updateSupport=' + upload.updateSupport"
-        :disabled="upload.isUploading"
-        :file-list="fileUpList"
-        :on-progress="handleFileUploadProgress"
-        :on-success="fileUpSuccess"
-        :on-error="fileUpError"
-        :auto-upload="false"
-        :before-upload="onBeforeUpload"
-        :data="modelParmeter"
-        drag
-      >
+    <!--业务模型导入对话框-->
+    <el-dialog title="upload.title"  v-model="upload.open" width="450px" append-to-body>
+      <el-upload ref="uploadRef" :limit="1" accept=".xlsx"
+                 action=""
+                 :multiple="false"
+                 :http-request="diyUploadFile"
+                 :file-list="fileList"
+                 :on-change="onChangeFile"
+                 :before-remove="beforeRemove"
+                 :on-remove="onRemoveFile"
+                 :on-progress="handleFileUploadProgress"
+                 :on-success="fileUpSuccess"
+                 :on-error="fileUpError"
+                 :before-upload="onBeforeUpload"
+                 :auto-upload="false"
+                 drag>
         <i class="el-icon-upload"></i>
-        <div class="el-upload__text">将文件拖到此处，或<em>点击选择文件</em></div>
+        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
         <div class="el-upload__tip text-center" slot="tip">
-          <span>仅允许导入xlsx格式文件。</span>  <el-link type="primary" :underline="false" style="font-size:12px;vertical-align: baseline;" @click="downloadTemplateF">下载业务模型样例</el-link>
-          <br>
-          <div class="el-upload__tip" slot="tip" v-show="upload.replace" >
-            将替换已经存在的业务模型导入模板
-          </div>
-
+          <!--div class="el-upload__tip" slot="tip">
+            <el-checkbox v-model="upload.updateSupport" />
+            是否更新已经存在的检查任务数据
+          </div-->
+          <span>仅允许导入xlsx格式文件。</span>
+          <el-link type="primary" :underline="false" style="font-size:12px;vertical-align: baseline;"
+                   @click="exportImportTemplate">下载模板
+          </el-link>
         </div>
       </el-upload>
+      <br>
+      <el-form ref="importForm" :model="importForm"   label-width="0px" v-show="showImportError">
+        <el-form-item label="" prop="remark"   >
+          <el-input v-model="importForm.remark" type="textarea" :autosize="{maxRows : 4}"  :readonly=true placeholder="请输入备注" />
+        </el-form-item>
+      </el-form>
+
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitFileForm">上 传</el-button>
-        <el-button @click="upload.open = false">取 消</el-button>
+        <el-button type="primary" @click="submitFileForm">导 入</el-button>
+        <el-button @click="importClose">关 闭</el-button>
       </div>
     </el-dialog>
+
 
   </div>
 </template>
@@ -363,6 +374,8 @@
 <script  setup name="BusinessModel">
 import {
   listBusinessModel,
+  listModelName,
+  listModelTree,
   getBusinessModel,
   delBusinessModel,
   addBusinessModel,
@@ -370,7 +383,13 @@ import {
   changeStatusBusinessModel,
   updateBusinessModel,
   exportBusinessModel,
-  downloadTemplate,changeModelInfo,listTreeNavInfo,checkBusinessModelIfExist,checkBusinessModelIfUsed,checkMinioStatus } from "@/api/report/BusinessModel";
+  downloadTemplate,
+  changeModelInfo,
+  listTreeNavInfo,
+  checkBusinessModelIfExist,
+  checkBusinessModelIfUsed,
+  checkMinioStatus, uploadModel
+} from "@/api/report/BusinessModel";
 import  Condition  from "@/api/search/condition";
 import  searchParam  from "@/api/search/searchform";
 // import uuidv1 from 'uuid/dist/esm-browser/v1';
@@ -411,6 +430,8 @@ const shareOpen = ref(false);
 
 const detailOpen = ref(false);
 
+const showImportError = ref(false);
+
 // 选中数组
 const names = ref([]);
 
@@ -440,8 +461,11 @@ const modelNamelist = ref([]);
 //文件列表
 const fileList = ref([]);
 
-// 上传的文件列表
-const fileUpList = ref([]);
+//文件File     上传参数
+const upFile = ref([]);
+
+//文件File列表 上传参数
+const upFileList = ref([]);
 
 const download_file_url = ref(import.meta.env.VITE_APP_BASE_API + '/api/infra/data/report/BusinessModel/downloadFile?filePath=');
 
@@ -548,11 +572,12 @@ const data = reactive({
         pageNum : 1,
         pageSize: 1000,
         modelName: null,
+        typeName:null
       },
 
-      ParamsConfig:{
-        typeName:Condition.like()
-      },
+      // ParamsConfig:{
+      //   typeName:null,
+      // },
 
       modelDscForm:{},
 
@@ -615,7 +640,19 @@ const data = reactive({
 
       modelParmeter:{},
 
-      // 用户导入参数
+      //树形配置
+      defaultProps: {
+        parentId: "modelParentId",
+        children: "children",
+        label: "modelName",
+        lazy: true
+      },
+      treeQueryParam: {
+        pageNum : 1,
+        pageSize: 5000
+      },
+
+      // 导入参数
       upload: {
         // 是否显示弹出层
         open: false,
@@ -630,13 +667,13 @@ const data = reactive({
         // 设置上传的请求头部
         headers: { Authorization: "Bearer " + getToken() },
 
-        // 文件上传地址
-        url: import.meta.env.VITE_APP_BASE_API + "/api/infra/data/report/BusinessModel/uploadfile"
+        url:  import.meta.env.VITE_APP_BASE_API + "/api/infra/data/report/BusinessModel/uploadfile"   // 文件上传地址
       },
-
+      //导入错误显示框
+      importForm:{},
 });
 
-const { queryParams, queryParamsConfig, form, rules, Params, ParamsConfig, modelDscForm, shareForm, shareRules, shareData, modelParmeter, upload } = toRefs(data);
+const { queryParams, queryParamsConfig, form, rules, Params, modelDscForm, shareForm, shareRules, shareData, modelParmeter, upload, defaultProps, treeQueryParam, importForm } = toRefs(data);
 
 const props = defineProps({
   parentId: {
@@ -691,8 +728,8 @@ function  onBeforeUpload(file){
 
 //增加业务模型父类下拉框功能
 function  getModelNameList() {
-  searchParamTem.value = searchParam(ParamsConfig.value, Params.value);
-  listBusinessModel(searchParamTem.value).then(response => {
+  // searchParamTem.value = searchParam(ParamsConfig.value, Params.value);
+  listModelName(Params.value).then(response => {
     modelNamelist.value = response.rows;
   });
 }
@@ -701,8 +738,10 @@ function  getModelNameList() {
 * 文件上传成功时的钩子
 */
 function  fileUpSuccess(res, file, fileList) {
+  debugger
+  console.log("上传模型成功!" + res.code) ;
   proxy.$refs.uploadRef.clearFiles(); //上传成功之后清除历史记录
-  if( res.code==200 ) {
+  if( res.code == 200 ) {
     modelParmeter.value.storageFileId = file.uid;
     modelParmeter.value.storageFileFullName = file.name;
     modelParmeter.value.storageFilePath = res.data.storageFilePath;
@@ -779,12 +818,14 @@ function  reset() {
     storageFileFullName: null,
     storageFilePath: null,
     storageFileSize: null,
+    storageFileUrl: null,
     ifDir: null,
     kafkaTopice: null,
     columnNum: null,
     columnCnName: null,
     columnName: null,
-    remark: null
+    remark: null,
+    messageType: null
   };
   proxy.resetForm("formRef");
 }
@@ -830,6 +871,7 @@ function  handleUpdate(row) {
     form.value = response.data;
     open.value = true;
     title.value = "修改【业务模型】";
+    console.log("目标库:" + form.value.messageType);
   });
 }
 
@@ -917,7 +959,7 @@ function  chanageFile(value , filed , id){
 function  handleDesc(row) {
   modelDscForm.value.modelName = row.modelName;
   modelDscForm.value.modelShortName = row.modelShortName;
-  modelDscForm.value.messageTypeLabel = row.messageTypeLabel;
+  modelDscForm.value.messageTypeLabel =messageTypeLabel(row.messageType);
   modelDscForm.value.kafkaTopice = row.kafkaTopice;
   modelDscForm.value.storageFileFullName = row.storageFileFullName;
   modelDscForm.value.storageFileSize = row.storageFileSize;
@@ -949,7 +991,7 @@ function  handleExport() {
 }
 
 function  handleShare(row) {
-  // resetshareForm();
+  resetshareForm();
   shareIsSuccess.value = false;
   shareOpen.value = true;
   shareForm.value.ifCode = 0;
@@ -980,27 +1022,27 @@ function  submitShareForm(){
   });
 }
 
-// // 分享表单重置
-// function  resetshareForm() {
-//   shareForm.value = {
-//     // endTime: null,
-//     // extractionCode: null,
-//     // shareBatchNum: null,
-//     // shareStatus: null,
-//     // shareType: null,
-//     // shareUserId: null,
-//     // shareFileType: null,
-//     // shareFileId: null,
-//     // shareFileName: null,
-//     // shareFileExtendName: null,
-//     // shareFileFullName: null,
-//     // shareFileSize: null,
-//     // storageFileId: null,
-//     // storageFilePath: null,
-//     // ifCode: null
-//   };
-//   proxy.resetForm("shareFormRef");
-// }
+// 分享表单重置
+function  resetshareForm() {
+  shareForm.value = {
+    endTime: null,
+    extractionCode: null,
+    shareBatchNum: null,
+    shareStatus: null,
+    shareType: null,
+    shareUserId: null,
+    shareFileType: null,
+    shareFileId: null,
+    shareFileName: null,
+    shareFileExtendName: null,
+    shareFileFullName: null,
+    shareFileSize: null,
+    storageFileId: null,
+    storageFilePath: null,
+    ifCode: null
+  };
+  proxy.resetForm("shareFormRef");
+}
 
 function  ShareLink(shareBatchNum) {
   return getShareLink(shareBatchNum)
@@ -1043,20 +1085,18 @@ function  submitFileForm() {
   proxy.$refs.uploadRef.submit();
 }
 
-//获取树形数据
+//获取树形数据  pageSize pageNum
 function  getModelTreeList() {
   loading.value = true;
-  var treeQueryParam = {};
-  treeQueryParam.pageNum = 1;
-  treeQueryParam.pageSize = 5000;
-  listBusinessModel(treeQueryParam.value).then(response => {
+  listModelTree(treeQueryParam.value).then(response => {
+    console.log("树形返回结果了!" + response.rows) ;
     modelTreeList.value = proxy.handleTree(response.rows, "id", "modelParentId");
     loading.value = false;
   });
 }
 
 // 树形选择筛选节点
-function  ilterNode(value, data) {
+function  filterNode(value, data) {
   if ( !value ) return true;
   return data.label.indexOf(value) !== -1;
 }
@@ -1075,14 +1115,98 @@ function  handleNodeClick(node) {
 
   }
 
-  searchParams.value = searchParam(queryParamsConfig.value, queryParams.value);
+  // searchParams.value = searchParam(queryParamsConfig.value, queryParams.value);
   loading.value = true;
-  listTreeNavInfo(treeIdArrs.value, searchParams.value.pageNum, searchParams.value.pageSize, searchParams.value ).then(res => {
+  listTreeNavInfo(treeIdArrs.value, queryParams.value.pageNum, queryParams.value.pageSize, queryParams.value ).then(res => {
     BusinessModelList.value = res.rows;
     total.value = res.total;
     loading.value = false;
   })
 }
+
+function  messageTypeLabel(messageType) {
+  switch(messageType) {
+    case 0:
+      return  "数据总线" ;
+      break;
+    case 1:
+      return  "数据上报" ;
+      break;
+    default:
+      return  "数据总线" ;
+  }
+}
+
+
+// 选择上传文件
+function   onChangeFile (file, fileList) {
+  const isLt100M = file.size / 1024 / 1024 < 100
+  if ( !isLt100M ) {
+    proxy.$msgbox.alert('上传文件大小不能超过 100MB!')
+    return false
+  }
+
+  upFileList.value = []
+  for (let x of fileList) {
+    if (x.raw) {
+      upFileList.value.push(x.raw)
+    }
+  }
+}
+
+// 移除文件之前
+function   beforeRemove(file, fileList) {
+  return proxy.$msgbox.alert(`确定移除 ${file.name}？`)
+}
+
+// 移除文件
+function   onRemoveFile (file, fileList) {
+  upFileList.value = []
+  for (let x of fileList) {
+    if (x.raw) {
+      upFileList.value.push(x.raw)
+    }
+  }
+}
+
+//vue界面将文件发送到后端
+function   diyUploadFile() {
+  debugger
+  upFile.value = upFileList.value[0];
+  let uploadForm = new FormData()
+  uploadForm.append('file', upFile.value)
+  modelParmeter.value.fileId = upFile.value.id;
+  modelParmeter.value.fileName = upFile.value.name;
+  // modelParmeter.value.extendName = upFile.value.extendName;
+  modelParmeter.value.storageFileSize = upFile.value.size;
+  uploadModel(modelParmeter.value, uploadForm).then(response => {
+    if ( response.code == 200 ) {
+      proxy.$modal.msgSuccess(response.msg)
+      upload.value0.open = false;
+      showImportError.value = false ;
+    }else{
+      proxy.$modal.msgError(response.msg)
+      showImportError.value = true ;
+      importForm.value.remark = response.msg;
+    }
+    return false
+
+  }).catch(error => {
+    showImportError.value = true ;
+    importForm.value.remark = error.toString();
+    return false
+  })
+}
+
+function importClose(){
+  upload.value.open=false;
+  showImportError.value = false ;
+  handleQuery();
+  fileList.value = [] ;   //上传文件列表
+  upFile.value = [] ;      //文件File 上传参数
+  upFileList.value = [] ;   //文件File列表 上传参数
+}
+
 
 
 </script>

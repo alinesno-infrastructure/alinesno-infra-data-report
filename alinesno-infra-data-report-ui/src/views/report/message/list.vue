@@ -253,7 +253,7 @@
   </div>
 </template>
 
-<script  setup name="MqMessage">
+<script  setup name="Message">
 import { ref, reactive, onMounted} from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 const { proxy } = getCurrentInstance();
@@ -272,6 +272,9 @@ import  searchParam  from "@/api/search/searchform";
 import {listBusinessModel } from "@/api/report/BusinessModel";
 import {listFileReport } from "@/api/report/FileReport";
 import {parseTime} from "@/utils/ruoyi";
+
+const startDate = ref(null);
+const endDate = ref(null);
 
 const selectedTimeRange = ref(1);
 
@@ -473,27 +476,26 @@ function  getFileList(){
 /** 查询队列消息列表 */
 function  getList() {
   // 判断是否搜索按钮触发
-   var startDate = null;
-   var endDate = null;
-
-   // if (startDate.value) {
-   //   startDate = startDate.value;
-   //   endDate = endDate.value;
-   // } else {
-   //   startDate = selectedTime[0].value;
-   //   endDate = selectedTime[1].value;
-   // }
-
-  startDate = selectedTime[0].value;
-  endDate = selectedTime[1].value;
-  //时间过滤
-  queryParams.value.addTime[0] = parseTime(startDate);
-  queryParams.value.addTime[1] = parseTime(endDate);
-
-
-  searchParams.value = searchParam(queryParamsConfig.value, queryParams.value);
+  // var startDateTmp = null;
+  // var endDateTmp = null;
+  //
+  // if ( startDate.value ) {
+  //   startDateTmp = startDate.value;
+  //   endDateTmp = endDate.value;
+  // } else {
+  //   startDateTmp = selectedTime[0].value;
+  //   endDateTmp = selectedTime[1].value;
+  // }
+  //
+  // //时间过滤
+  // queryParams.value.addTime[0] = parseTime(startDateTmp);
+  // queryParams.value.addTime[1] = parseTime(endDateTmp);
+  //
+  //
+  // searchParams.value = searchParam(queryParamsConfig.value, queryParams.value);
   loading.value = true;
-  listMqMessage(searchParams.value).then(response => {
+  // listMqMessage(searchParams.value).then(response => {
+  listMqMessage(queryParams.value).then(response => {
     MqMessageList.value = response.rows;
     total.value = response.total;
     loading.value = false;
@@ -695,7 +697,7 @@ function  chanageFile(value , filed , id){
 
 /** 导出按钮操作 */
 function  handleExport() {
-  const queryParams = this.queryParams;
+  const queryParams = queryParams.value;
   proxy.$confirm('是否确认导出所有队列消息数据项?', "警告", {
       confirmButtonText: "确定",
       cancelButtonText: "取消",

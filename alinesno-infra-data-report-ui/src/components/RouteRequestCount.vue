@@ -1,6 +1,6 @@
 <template>
   <div>
-      <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible" width="55%" :close-on-click-modal="false">
+      <el-dialog :title="dialogTitle" v-model="dialogFormVisible" width="55%" :close-on-click-modal="false">
             <i class="iconfont icon-icon_renwujincheng" style="font-size: 16pt; color: #90A0A5;"></i>
             <span class="span_14">7日请求总量</span>
             <el-divider style="width: 80%;"></el-divider>

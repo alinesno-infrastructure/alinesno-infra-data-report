@@ -24,7 +24,7 @@
                 <div class="chat-ai-say-body">
                   <div class="say-message-info">智能专家体系 07-16 19:19:51</div>
                   <div class="say-message-body">
-                    Hi，luoandon，欢迎使用售后在线服务。 <br/>
+                    Hi，LuoXiaoDong，欢迎使用售后在线服务。 <br/>
                     你可以选择你的应用AIP使用场景来提问，然后完成专家服务的接入 <br/>
                     请用“关键字+问题”描述您的问题，如添加搜索字段[username]
                   </div>

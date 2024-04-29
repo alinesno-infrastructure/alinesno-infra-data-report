@@ -119,6 +119,7 @@ export function changeFileShareField(value , field , id){
 
 // 新增【请填写功能名称】
 export function addFileShareCustom(data) {
+  debugger
   return request({
     url: managerUrl.saveShare,
     method: 'post',
@@ -133,6 +134,7 @@ export function getShareLink(shareBatchNum) {
 
 // 查询【通过分享批次号获取分享详情】详细
 export function getShareInfo(shareBatchNum) {
+  debugger
   return request({
     url: managerUrl.shareInfo+"?shareBatchNum="+ shareBatchNum,
     method: 'get'

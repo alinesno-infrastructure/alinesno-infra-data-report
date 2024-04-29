@@ -2,7 +2,6 @@ import { createWebHistory, createRouter } from 'vue-router'
 /* Layout */
 //import Layout from '@/layout/SaaSLayout'
 import Layout from '@/layout'
-import Share from '@/views/report/fileShare/share'
 
 /**
  * Note: 路由配置项
@@ -136,11 +135,6 @@ export const constantRoutes = [
         component: () => import('@/views/gateway/createBalanced'),
         meta: { title: '创建负载均衡', icon: 'dashboard', affix: true }
       },
-      {
-        path: '/share/:shareBatchNum',
-        component: Share ,
-        hidden: true
-      }
 
 
     ]

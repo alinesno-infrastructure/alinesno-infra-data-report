@@ -59,7 +59,7 @@
 			</el-col>
 		</el-row>
 		
-		<el-drawer :visible.sync="drawer" :direction="direction" :before-close="handleClose" :with-header="false" size="24%">
+		<el-drawer v-model="drawer" :direction="direction" :before-close="handleClose" :with-header="false" size="24%">
 			<!-- 父组件传参与子组件方法监听 -->
 			<routeInfoComponent ref="routeInfo" :infoForm="infoForm"></routeInfoComponent>
 		</el-drawer>

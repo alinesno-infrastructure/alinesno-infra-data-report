@@ -240,7 +240,7 @@
   </div>
 </template>
 
-<script  setup name="MqMessage">
+<script  setup name="MessageHis">
 import { ref, reactive, onMounted} from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 const { proxy } = getCurrentInstance();
@@ -270,6 +270,9 @@ const title = ref("");
 
 // 消息内容
 const messageContent = ref("");
+
+const startDate = ref(null);
+const endDate = ref(null);
 
 // 遮罩层
 const loading = ref(true);
@@ -433,10 +436,7 @@ onMounted(() => {
   //查询业务模型
   getFileList();
 
-  selectedTimeRangeChange();
-
   getList();
-
 })
 
 
@@ -456,29 +456,30 @@ function  getFileList(){
 
 /** 查询队列消息列表 */
 function  getList() {
-  // 判断是否搜索按钮触发
-   var startDate = null;
-   var endDate = null;
-
-   // if (startDate.value) {
-   //   startDate = startDate.value;
-   //   endDate = endDate.value;
-   // } else {
-   //   startDate = selectedTime[0].value;
-   //   endDate = selectedTime[1].value;
-   // }
-
-  startDate = selectedTime[0].value;
-  endDate = selectedTime[1].value;
-
-  //处理时间过滤
-  queryParams.value.addTime[0] = parseTime(startDate);
-  queryParams.value.addTime[1] = parseTime(endDate);
-
-
-  searchParams.value = searchParam(queryParamsConfig.value, queryParams.value);
-  loading.value = true;
-  listMqMessage(searchParams.value).then(response => {
+  // debugger
+  // // 判断是否搜索按钮触发
+  // var startDateTmp = null;
+  // var endDateTmp = null;
+  //
+  // if ( startDate.value ) {
+  //   startDateTmp = startDate.value;
+  //   endDateTmp = endDate.value;
+  // } else {
+  //   startDateTmp = selectedTime[0].value;
+  //   endDateTmp = selectedTime[1].value;
+  // }
+  //
+  //
+  //
+  // //时间过滤
+  // queryParams.value.addTime[0] = parseTime(startDateTmp);
+  // queryParams.value.addTime[1] = parseTime(endDateTmp);
+  //
+  //
+  // searchParams.value = searchParam(queryParamsConfig.value, queryParams.value);
+  // loading.value = true;
+  // listMqMessage(searchParams.value).then(response => {
+    listMqMessage(queryParams.value).then(response => {
     MqMessageList.value = response.rows;
     total.value = response.total;
     loading.value = false;

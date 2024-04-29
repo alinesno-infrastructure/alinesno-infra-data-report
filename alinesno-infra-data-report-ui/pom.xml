@@ -8,7 +8,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <artifactId>alinesno-ui</artifactId>
+    <artifactId>alinesno-infra-data-integration-ui</artifactId>
     <packaging>jar</packaging>
 
     <properties>
